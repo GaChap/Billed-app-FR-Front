@@ -20,10 +20,14 @@ export default class NewBill {
     const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
     const filePath = e.target.value.split(/\\/g)
     const fileName = filePath[filePath.length - 1]
-    const fileFormat = fileName.split(".")[1];//Je désactive le bouton si le format ne correspond pas
+    const fileFormat = fileName.split(".")[1];
+    //Je désactive le bouton si le format ne correspond pas
     if (fileFormat != "jpg" && fileFormat != "jpeg" && fileFormat != "png" && fileFormat != "PNG") {
       this.document.querySelector(`button[id="btn-send-bill"]`).disabled = true;
-    } else { this.document.querySelector(`button[id="btn-send-bill"]`).disabled = false; }
+    }
+    else {
+      this.document.querySelector(`button[id="btn-send-bill"]`).disabled = false;
+    }
     const formData = new FormData()
     const email = JSON.parse(localStorage.getItem("user")).email
     formData.append('file', file)
@@ -38,7 +42,7 @@ export default class NewBill {
         }
       })
       .then(({ fileUrl, key }) => {
-        console.log(fileUrl)
+        //console.log(fileUrl)
         this.billId = key
         this.fileUrl = fileUrl
         this.fileName = fileName
@@ -46,7 +50,7 @@ export default class NewBill {
   }
   handleSubmit = e => {
     e.preventDefault()
-    console.log('e.target.querySelector(`input[data-testid="datepicker"]`).value', e.target.querySelector(`input[data-testid="datepicker"]`).value)
+    //console.log('e.target.querySelector(`input[data-testid="datepicker"]`).value', e.target.querySelector(`input[data-testid="datepicker"]`).value)
     const email = JSON.parse(localStorage.getItem("user")).email
     const bill = {
       email,

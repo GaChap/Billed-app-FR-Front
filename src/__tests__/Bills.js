@@ -30,7 +30,7 @@ describe("Given I am connected as an employee", () => {
       await waitFor(() => screen.getByTestId('icon-window'))
       const windowIcon = screen.getByTestId('icon-window')
       //to-do write expect expression
-      //expect(windowIcon).toBeTruthy()
+      expect(windowIcon).toBeTruthy()
       expect(windowIcon.classList[0]).toEqual("active-icon");
     })
 
@@ -41,11 +41,23 @@ describe("Given I am connected as an employee", () => {
       const datesSorted = [...dates].sort(antiChrono)
       expect(dates).toEqual(datesSorted)
     })
-  })
-})
-//Test icon-eye
-describe("Given I am connected as an employee", () => {
-  describe("When I am on Bills Page", () => {
+    //Test bouton
+    test("click on the button to go to the new bill page", async () => {
+      Object.defineProperty(window, 'localStorage', { value: localStorageMock })
+      window.localStorage.setItem('user', JSON.stringify({
+        type: 'Employee'
+      }))
+      const root = document.createElement("div")
+      root.setAttribute("id", "root")
+      document.body.append(root)
+      router()
+      window.onNavigate(ROUTES_PATH.Bills);
+      const newBillButton = screen.getByTestId('btn-new-bill');
+      newBillButton.click();
+      const NewBillForm = screen.getByTestId("form-new-bill");
+      expect(NewBillForm).toBeTruthy();
+    })
+    //test icopn-eye
     test('Then modal window should open when eye is clicked', () => {
       //Inspiré de Dashboard
       Object.defineProperty(window, 'localStorage', { value: localStorageMock })
@@ -69,40 +81,25 @@ describe("Given I am connected as an employee", () => {
     })
   })
 })
-//Test bouton
+
+//Test d'intégration GET
 describe("Given I am connected as an employee", () => {
   describe("When I am on Bills Page", () => {
-    test("click on the button to go to the new bill page", async () => {
+    test('fetches bills from mock API GET', () => {
       Object.defineProperty(window, 'localStorage', { value: localStorageMock })
       window.localStorage.setItem('user', JSON.stringify({
         type: 'Employee'
       }))
-      const root = document.createElement("div")
-      root.setAttribute("id", "root")
-      document.body.append(root)
-      router()
-      window.onNavigate(ROUTES_PATH.Bills);
-      const newBillButton = screen.getByTestId('btn-new-bill');
-      //expect(newBillButton).toBeTruthy();
-      newBillButton.click();
-      const NewBillForm = screen.getByTestId("form-new-bill");
-      expect(NewBillForm).toBeTruthy();
-    })
-  })
-})
-//Test d'intégration GET
-describe("Given I am connected as an employee", () => {
-  describe("When I am on Bills Page", () => {
-    test('fetches bills from mock API GET', async () => {
       localStorage.setItem('user', JSON.stringify({ type: 'Employee', email: 'e@e' }));
       const root = document.createElement('div');
       root.setAttribute('id', 'root');
       document.body.append(root);
       router();
+      document.body.innerHTML = BillsUI({ data: bills });
       window.onNavigate(ROUTES_PATH.Bills);
-      const arrayContent = await screen.getByTestId('tbody');
+      const arrayContent = screen.getByTestId('tbody');
       expect(arrayContent).toBeTruthy();
-      const contentFrais = await screen.getByText('Mes notes de frais');
+      const contentFrais = screen.getByText('Mes notes de frais');
       expect(contentFrais).toBeTruthy();
     });
 

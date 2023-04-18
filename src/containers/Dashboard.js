@@ -86,7 +86,6 @@ export default class {
   }
 
   handleEditTicket(e, bill, bills) {
-    //console.log(bill);
     if (this.counter === undefined || this.id !== bill.id) this.counter = 0
     if (this.id === undefined || this.id !== bill.id) this.id = bill.id
     if (this.counter % 2 === 0) {
@@ -132,51 +131,25 @@ export default class {
   }
 
   handleShowTickets(e, bills, index) {
-
     if (this.counter === undefined || this.index !== index) this.counter = 0
     if (this.index === undefined || this.index !== index) this.index = index
-    const Test = Array.from(document.getElementsByClassName("bill-card"));
-    console.log(Test);
-    //console.log(this.document.querySelector("#status-bills-container" + index).children)
-    const Test2 = this.document.querySelector("#status-bills-container" + index).children
-    console.log(Test2)
-    if (this.counter == 0 && Test2.length != 0) {
-      this.counter = 1;
-    }
-    /*console.log(Test.some((item) => {
-      item.parentElement == document.querySelector("#status-bills-container" + index);
-    }))*/
-    //console.log(this.document.querySelector("#status-bills-container" + index).childNodes/*hasChildNodes()*/);
     if (this.counter % 2 === 0) {
-      //le counter est remis à 0 donc cartes cachés quand on ouvre une seconde liste
-      //il faut alors recliquer sur la flèche pour que l'on puisse recliquer sur les cartes
       $(`#arrow-icon${this.index}`).css({ transform: 'rotate(0deg)' })
       $(`#status-bills-container${this.index}`)
         .html(cards(filteredBills(bills, getStatus(this.index))))
       this.counter++
-      console.log("l'index est :" + this.index);
-      console.log("le counter est :" + this.counter);
     } else {
       $(`#arrow-icon${this.index}`).css({ transform: 'rotate(90deg)' })
       $(`#status-bills-container${this.index}`)
         .html("")
       this.counter--
-      console.log("l'index est :" + this.index);
-      console.log("le counter est :" + this.counter);
-
     }
-
-    //Si this.counter == 0 && contient une carte min alors ferme la liste
-
     bills.forEach(bill => {
-      $(`#open-bill${bill.id}`).click((e) => {
-        console.log(bill)
+      $(`#status-bills-container${index} #open-bill${bill.id}`).click((e) => {
         this.handleEditTicket(e, bill, bills)
-      })
-    })
-
+      });
+    });
     return bills
-
   }
 
   getBillsAllUsers = () => {
